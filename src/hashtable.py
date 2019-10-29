@@ -46,19 +46,21 @@ class HashTable:
         Fill this in.
         '''
         indexOfNum = self._hash_mod(key)
+        node = self.storage[indexOfNum]
         if self.storage[indexOfNum] is None:
             self.storage[indexOfNum] = LinkedPair(key,value)
         else:
-            current = self.storage[indexOfNum]
-            while current and current.key != key:
-                k = current.next
-                current = k
-            if current:
-                current.next = LinkedPair(key,value)
+            prev = None
+            while node and node.key != key:
+                prev = node
+                node = node.next
+            if node:
+                node.value = value
             else:
-                current = LinkedPair(key,value)
-            
-        # the linklist contains the key and value which can be checked 
+                prev.next = LinkedPair(key,value)
+        # while doing for the current node the prev node need to be considered
+        # just in case its none so we can have something to reference 
+        #  if the value is the same we change the value
 
     def remove(self, key):
         '''
@@ -68,8 +70,94 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        # index = self._hash_mod(key)
+        # current_node = self.storage[index]
 
+        # prev = None
+        # if not node:
+        #     print('Not found')
+        #     return
+        # while node and node.key != key:
+        #     prev = node
+        #     node = node.next
+        #     if prev.key == key:
+        #         prev = None
+        
+        # get position
+        # prev = None
+        # while node:
+        #     if 
+        #     if node.key == key and prev:
+        #         prev.next = node.next
+        #     else:
+        #         prev = node
+        #         node = node.next
+
+        # return None
+        # tranverse the linked list 
+        # compare the key to see if its a match
+        # set prev
+        # connect the prev next to node next
+        # index = self._hash_mod(key)
+    
+        # if not self.storage[index]:
+        #     print(f"Hash[{key}] cannot be deleted: It does not exist")
+        #     return
+        # current_node = self.storage[index]
+        # prev_node = None
+       
+        # if current_node.key == key and not current_node.next:
+        #     self.storage[index] = None
+        # elif current_node.key == key:
+        #     self.storage[index] = self.storage[index].next
+        # else:
+        #     while current_node:
+        #         if current_node.key == key:
+        #             prev_node.next = current_node.next
+        #             return
+        #         prev_node = current_node
+        #         current_node = current_node.next
+
+        # hashed_key = self._hash_mod(key)
+        # if self.storage[hashed_key] is None:
+        #     print('Key does not exist', key)
+        # else:
+        #     self.storage[hashed_key] = None
+        
+        #check for 1st if it has last then u end the loop
+        # if 2nd or any has next... hold the previous
+        # cut the node .... hold the next
+        # take the prev and join it with the held next
+
+        indexOfNum = self._hash_mod(key)
+        node = self.storage[indexOfNum]
+
+        prev = None
+        # if node and node.key == key:
+        #     if node.next:
+        #         node = node.next
+        #         return
+        #     self.storage[indexOfNum] = None
+        # return 'Key does not exist'
+            # at this stage we have passed the 1st one
+        while node and node.key != key:
+            prev = node
+            node = node.next
+        if node:
+            if node.next:
+                prev2 = node.next
+                prev = prev2
+            self.storage[indexOfNum] = None
+        else:
+            return 'Key does not exist'
+
+        
+        
+             
+
+                
+                  
+            
 
     def retrieve(self, key):
         '''
@@ -81,34 +169,18 @@ class HashTable:
         '''
         indexOfNum = self._hash_mod(key)
         node = self.storage[indexOfNum]
-        if not node:
-            return 'Not Found'
-        
-        # while node and node.key != key:
-		#         node = node.next
 
-        # if not node:
-        #     return 'Not Found'
-        # else:
-        #     print(node.value, 'hello')
-        #     return node.value
-        while node is not None and node.key != key:
+        while node and node.key != key:
 		        node = node.next
-        # 4. Now, node is the requested key/value pair or None
-
-        if node is None:
-            # Not found
-
+        if not node:
             return None
         else:
-            # Found - return the data value
-
             return node.value
+        # we don't have prev? what of if the last node.next is none
+        # OR what of the case the node is not having next
+        # but i get that the while will handle it
+
             
-
-        
-
-
     def resize(self):
         '''
         Doubles the capacity of the hash table and
@@ -130,16 +202,16 @@ if __name__ == "__main__":
     # print("")
 
     # # Test storing beyond capacity
-    # print(ht.retrieve("line_1"))
-    # print(ht.retrieve("line_2"))
-    # print(ht.retrieve("line_3"))
+    print(ht.retrieve("line_1"))
+    print(ht.retrieve("line_2"))
+    print(ht.retrieve("line_3"))
 
     # # Test resizing
-    # old_capacity = len(ht.storage)
-    # ht.resize()
-    # new_capacity = len(ht.storage)
+    old_capacity = len(ht.storage)
+    ht.resize()
+    new_capacity = len(ht.storage)
 
-    # print(f"\nResized from {old_capacity} to {new_capacity}.\n")
+    print(f"\nResized from {old_capacity} to {new_capacity}.\n")
 
     # # Test if data intact after resizing
     # print(ht.retrieve("line_1"))
