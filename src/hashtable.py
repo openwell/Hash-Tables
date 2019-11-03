@@ -4,7 +4,7 @@
 class LinkedPair:
     def __init__(self, key, value):
         self.key = key
-        self.value = value
+        self.value = value 
         self.next = None
 
 class HashTable:
@@ -15,8 +15,6 @@ class HashTable:
     def __init__(self, capacity):
         self.capacity = capacity  # Number of buckets in the hash table
         self.storage = [None] * capacity
-
-
     def _hash(self, key):
         '''
         Hash an arbitrary key and return an integer.
@@ -24,17 +22,13 @@ class HashTable:
         You may replace the Python hash with DJB2 as a stretch goal.
         '''
         return hash(key)
+    # def _hash_djb2(self, key):
+    #     '''
+    #     Hash an arbitrary key using DJB2 hash
 
-
-    def _hash_djb2(self, key):
-        '''
-        Hash an arbitrary key using DJB2 hash
-
-        OPTIONAL STRETCH: Research and implement DJB2
-        '''
-        pass
-
-
+    #     OPTIONAL STRETCH: Research and implement DJB2
+    #     '''
+    #     pass
     def _hash_mod(self, key):
         '''
         Take an arbitrary key and return a valid integer index
@@ -51,9 +45,22 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
-
-
+        indexOfNum = self._hash_mod(key)
+        node = self.storage[indexOfNum]
+        if self.storage[indexOfNum] is None:
+            self.storage[indexOfNum] = LinkedPair(key,value)
+        else:
+            prev = None
+            while node and node.key != key:
+                prev = node
+                node = node.next
+            if node:
+                node.value = value
+            else:
+                prev.next = LinkedPair(key,value)
+        # while doing for the current node the prev node need to be considered
+        # just in case its none so we can have something to reference 
+        #  if the value is the same we change the value
 
     def remove(self, key):
         '''
@@ -63,8 +70,138 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        # index = self._hash_mod(key)
+        # node = self.storage[index]
 
+        # prev = None
+        # if not node:
+        #     print('Not found')
+        #     return
+        # while node and node.key != key:
+        #     prev = node
+        #     node = node.next
+        #     if prev.key == key:
+        #         prev = None
+        
+        # # get position
+        # prev = None
+        # while node:
+        #     # if 
+        #     if node.key == key and prev:
+        #         prev.next = node.next
+        #     else:
+        #         prev = node
+        #         node = node.next
+
+        # return None
+        # tranverse the linked list 
+        # compare the key to see if its a match
+        # set prev
+        # connect the prev next to node next
+
+        # pascal
+        # index = self._hash_mod(key)
+    
+        # if not self.storage[index]:
+        #     print(f"Hash[{key}] cannot be deleted: It does not exist")
+        #     return
+        # current_node = self.storage[index]
+        # prev_node = None
+       
+        # if current_node.key == key and not current_node.next:
+        #     self.storage[index] = None
+        # elif current_node.key == key:
+        #     self.storage[index] = self.storage[index].next
+        # else:
+        #     while current_node:
+        #         if current_node.key == key:
+        #             prev_node.next = current_node.next
+        #             return
+        #         prev_node = current_node
+        #         current_node = current_node.next
+
+        # hashed_key = self._hash_mod(key)
+        # if self.storage[hashed_key] is None:
+        #     print('Key does not exist', key)
+        # else:
+        #     self.storage[hashed_key] = None
+        
+        #check for 1st if it has last then u end the loop
+        # if 2nd or any has next... hold the previous
+        # cut the node .... hold the next
+        # take the prev and join it with the held next
+
+
+
+        indexOfNum = self._hash_mod(key)
+        node = self.storage[indexOfNum]
+
+        prev = None
+        # The beginning part
+        if node and node.key == key:
+            if node.next:
+                self.storage[indexOfNum] = self.storage[indexOfNum].next
+                return
+            self.storage[indexOfNum] = None
+            return
+            # at this stage we have passed the 1st one
+            # we are looping
+        while node and node.key != key:
+            prev = node
+            node = node.next
+        # it could end because its empty
+        # or got to the key
+        if node and node.key == key:
+            # if not empty
+            if node.next:
+                # 1->2(prev)->3(next)->4(next)
+                # if it has next
+                # prev2 = node.next
+                prev.next = node.next
+                return
+            node = None
+            prev.next = None
+        else:
+            print(f"Hash[{key}] cannot be deleted: It does not exist")
+            return
+
+
+
+        # Shawn answer
+        # index = self._hash_mod(key)
+
+        # if not self.storage[index]:
+        #     print(f"Hash[{key}] cannot be deleted: It does not exist")
+        #     return
+        # current_node = self.storage[index]
+        # prev_node = None
+        # # handle all edge cases
+        # # not available
+        # # beginning
+        # # end
+        # # middle ****
+        # #    beginning or single or end
+        # if current_node.key == key and not current_node.next:
+        #     self.storage[index] = None
+        #  #    
+        # elif current_node.key == key:
+        #     self.storage[index] = self.storage[index].next
+        # # if current_node.key == key & current_node.next i guess
+        # else:
+        #     while current_node:
+        #         if current_node.key == key:
+        #             prev_node.next = current_node.next
+        #             return
+        #         prev_node = current_node
+        #         current_node = current_node.next
+
+        
+        
+             
+
+                
+                  
+            
 
     def retrieve(self, key):
         '''
@@ -74,9 +211,20 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        indexOfNum = self._hash_mod(key)
+        node = self.storage[indexOfNum]
 
+        while node and node.key != key:
+		        node = node.next
+        if not node:
+            return None
+        else:
+            return node.value
+        # we don't have prev? what of if the last node.next is none
+        # OR what of the case the node is not having next
+        # but i get that the while will handle it
 
+            
     def resize(self):
         '''
         Doubles the capacity of the hash table and
@@ -84,7 +232,18 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        new_hash_table = HashTable(2 * len(self.storage))
+        current_pair = None
+
+        for i in range(len(self.storage)):
+            current_pair = self.storage[i]
+            while current_pair is not None:
+                new_hash_table.insert(current_pair.key, current_pair.value)
+                current_pair = current_pair.next
+        self.capacity = new_hash_table.capacity
+        self.storage = new_hash_table.storage
+        return new_hash_table
+
 
 
 
@@ -95,23 +254,23 @@ if __name__ == "__main__":
     ht.insert("line_2", "Filled beyond capacity")
     ht.insert("line_3", "Linked list saves the day!")
 
-    print("")
+    # print("")
 
-    # Test storing beyond capacity
+    # # Test storing beyond capacity
     print(ht.retrieve("line_1"))
     print(ht.retrieve("line_2"))
     print(ht.retrieve("line_3"))
 
-    # Test resizing
+    # # Test resizing
     old_capacity = len(ht.storage)
     ht.resize()
     new_capacity = len(ht.storage)
 
     print(f"\nResized from {old_capacity} to {new_capacity}.\n")
 
-    # Test if data intact after resizing
+    # # Test if data intact after resizing
     print(ht.retrieve("line_1"))
     print(ht.retrieve("line_2"))
     print(ht.retrieve("line_3"))
 
-    print("")
+    # print("")
