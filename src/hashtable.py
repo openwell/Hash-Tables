@@ -71,7 +71,7 @@ class HashTable:
         Fill this in.
         '''
         # index = self._hash_mod(key)
-        # current_node = self.storage[index]
+        # node = self.storage[index]
 
         # prev = None
         # if not node:
@@ -83,10 +83,10 @@ class HashTable:
         #     if prev.key == key:
         #         prev = None
         
-        # get position
+        # # get position
         # prev = None
         # while node:
-        #     if 
+        #     # if 
         #     if node.key == key and prev:
         #         prev.next = node.next
         #     else:
@@ -98,6 +98,8 @@ class HashTable:
         # compare the key to see if its a match
         # set prev
         # connect the prev next to node next
+
+        # pascal
         # index = self._hash_mod(key)
     
         # if not self.storage[index]:
@@ -129,27 +131,69 @@ class HashTable:
         # cut the node .... hold the next
         # take the prev and join it with the held next
 
+
+
         indexOfNum = self._hash_mod(key)
         node = self.storage[indexOfNum]
 
         prev = None
-        # if node and node.key == key:
-        #     if node.next:
-        #         node = node.next
-        #         return
-        #     self.storage[indexOfNum] = None
-        # return 'Key does not exist'
+        # The beginning part
+        if node and node.key == key:
+            if node.next:
+                self.storage[indexOfNum] = self.storage[indexOfNum].next
+                return
+            self.storage[indexOfNum] = None
+            return
             # at this stage we have passed the 1st one
+            # we are looping
         while node and node.key != key:
             prev = node
             node = node.next
-        if node:
+        # it could end because its empty
+        # or got to the key
+        if node and node.key == key:
+            # if not empty
             if node.next:
-                prev2 = node.next
-                prev = prev2
-            self.storage[indexOfNum] = None
+                # 1->2(prev)->3(next)->4(next)
+                # if it has next
+                # prev2 = node.next
+                prev.next = node.next
+                return
+            node = None
+            prev.next = None
         else:
-            return 'Key does not exist'
+            print(f"Hash[{key}] cannot be deleted: It does not exist")
+            return
+
+
+
+        # Shawn answer
+        # index = self._hash_mod(key)
+
+        # if not self.storage[index]:
+        #     print(f"Hash[{key}] cannot be deleted: It does not exist")
+        #     return
+        # current_node = self.storage[index]
+        # prev_node = None
+        # # handle all edge cases
+        # # not available
+        # # beginning
+        # # end
+        # # middle ****
+        # #    beginning or single or end
+        # if current_node.key == key and not current_node.next:
+        #     self.storage[index] = None
+        #  #    
+        # elif current_node.key == key:
+        #     self.storage[index] = self.storage[index].next
+        # # if current_node.key == key & current_node.next i guess
+        # else:
+        #     while current_node:
+        #         if current_node.key == key:
+        #             prev_node.next = current_node.next
+        #             return
+        #         prev_node = current_node
+        #         current_node = current_node.next
 
         
         
@@ -188,7 +232,18 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        new_hash_table = HashTable(2 * len(self.storage))
+        current_pair = None
+
+        for i in range(len(self.storage)):
+            current_pair = self.storage[i]
+            while current_pair is not None:
+                new_hash_table.insert(current_pair.key, current_pair.value)
+                current_pair = current_pair.next
+        self.capacity = new_hash_table.capacity
+        self.storage = new_hash_table.storage
+        return new_hash_table
+
 
 
 
@@ -214,8 +269,8 @@ if __name__ == "__main__":
     print(f"\nResized from {old_capacity} to {new_capacity}.\n")
 
     # # Test if data intact after resizing
-    # print(ht.retrieve("line_1"))
-    # print(ht.retrieve("line_2"))
-    # print(ht.retrieve("line_3"))
+    print(ht.retrieve("line_1"))
+    print(ht.retrieve("line_2"))
+    print(ht.retrieve("line_3"))
 
     # print("")
